@@ -1,0 +1,27 @@
+\section{Correlation Clustering}
+Consider $G = ([n],\binom{[n]}{2})$, the complete graph on $n$ vertices. Each edge in $G$ is associated with a label, either $+$ or $-$. Two vertices are said to be similar if the edge between them is $+$ and dissimilar if the edge between them is $-$. The cost of a clustering $C$ over $[n]$ is defined as the sum of the number of similar edges between vertices in different clusters, and dissimilar vertices between vertices in the same cluster. The cost of a clustering $C$ over a subset of vertices $V \subseteq [n]$ is computed by only counting the cost incurred by the induced subgraph of $V$. For a clustering $C$, this is denoted $\cost (C, V)$.
+
+\begin{problem}[Correlation Clustering] \label{prob:1}
+	The correlation clustering problem is to cluster the vertices in $[n]$ into as many or as few clusters as possible such that the total cost is minimized.
+	\begin{equation*}
+		\text{Find } C^* = \argmin_C \cost (C, [n]).
+	\end{equation*}
+\end{problem}
+
+\begin{problem}[$m$-Robust Correlation Clustering] \label{prob:2}
+	We are given the complete graph $G$ with $\{ +,- \}$ edge labels and the optimal correlation clustering, $C^*$ of the vertices of $G$. The goal is to pick $m$ vertices to remove from $G$ such that the cost of the remaining subgraph is minimized for the clustering $C^*$. In other words, the goal is to find:
+	\begin{equation*}
+		\mathrm{Find }\ R^* = \argmin_{\substack{R \subseteq [n] \\ |R| = m}} \cost (C^*, [n] \setminus R)
+	\end{equation*}
+\end{problem}
+
+In addition, we may consider two other problems - generalized correlation and $m$-robust correlation clustering. The objective here is the same as in Problems \ref{prob:1} and \ref{prob:2}, but the underlying graph is a general graph and need not be the complete graph.
+
+\begin{proposition}
+Can we claim that:
+	\begin{equation*}
+		\min_{\substack{R \subseteq [n] \\ |R| = m}} \cost (C^*, [n] \setminus R) \overset{?}{=} \min_C \min_{\substack{R \subseteq [n] \\ |R| = m}} \cost (C, [n] \setminus R)
+	\end{equation*}
+where $C^* = \argmin_{C} \cost (C, [n])$. This is possibly true for $m=1$.
+\end{proposition}
+This indicates that the robust problem actually solves the more general problem of finding the best clustering on $n$ points assuming that one is allowed to discard at most $m$ points.

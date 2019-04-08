@@ -1,0 +1,5 @@
+0. Get rid of additive approximation term and see if analysis can be improved.
+1. Read about existing algorithms for regular correlation clustering and see if they can be extended to the case of general graphs.
+2. Weighted analogue of the problem where vertices have removal cost.
+3. Think about combinatorial algorithms for this problem.
+4. General budgeted problem where vertices have a removal cost and edges have a misclassification penalty.

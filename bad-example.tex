@@ -1,0 +1,86 @@
+\section{Correlation Clustering solves Robust version upto constant approximation}
+
+Consider a data set $N$, which is perfectly clusterable. Let this perfect clustering be denoted $\mathbf{C}_1$, composed of $m$ clusters $R_1, R_2, \dots, R_m$. Let us add $X$ new points to the original data points in order to disturb the clustering. $X$ are referred to as outliers. Let the optimal clustering on $N \cup X$ be denoted $\mathbf{C}_2$. Then, we show the following.
+
+\begin{theorem} \label{theorem:17}
+A vertex is \textbf{bad} with respect to a clustering, if it has at least one mis-classified edge associated with it. Then, on any perfect clustering, it is possible to remove $\mathcal{O} (X)$ points from $\mathbf{C}_2$ and reduce its cost to $0$. Or in other words, the number of bad vertices with respect to $\mathbf{C}_2$ is $\mathcal{O} (X)$.
+\end{theorem}
+\begin{proof}
+Let us assume that there is one of each possible kind of cluster in $C_2$
+\begin{enumerate}
+    \item[$\mathbf{c}_1$:] contains $r_{11}$ and some $x_1 \subseteq X$.
+    \item[$\mathbf{c}_2$:] contains $r_{12}$ and for every $i \ge 2$, some $r_i \subseteq R_i$ (not all $0$) and some $x_2 \subseteq X$.
+    \item[$\mathbf{c}_3$:] contains $r_{13}$ and some $x_3 \subseteq X$.
+    \item[$\mathbf{c}_4$:] $r_{14}$ in its own cluster.
+\end{enumerate}
+
+
+\textit{Observation 1:} In the clustering $\mathbf{C}_2$, for $i = 1,2,\dots,m$, consider a cluster, $B$ formed by $r_i \subset R_i$. First assume that at least two of $|r_1|, |r_2|, \dots,|r_m|$ are non-zero. In order to keep these disagreeing points together, there must be some $x \subseteq X$ belonging to this cluster. Or else, one can split this cluster such that each $r_i$ belongs in its individual cluster, and lower the cost. Therefore, the contents of $B$ are $r_1 \cup r_2 \cup \dots \cup r_m \cup x$ where $|x| > 0$. We now use the optimality of $\mathbf{C}_2$ to make some conclusions about $|x|$:
+\begin{enumerate}
+    \item The cost of $\mathbf{C}_2$ must increase when $B$ is separated into two components: one composed of $r_2 \cup r_3 \cup \dots \cup r_m \cup x $ and another with $r_1$ in its own cluster. By the optimality of $\mathbf{C}_2$, this clustering must have a higher cost:
+    \begin{align}
+        |r_1| \left( \sum_{j \ge 2} |r_j| \right) &\leq |x| |r_1| \nonumber\\
+        \implies |r_2| + |r_3| + \cdots + |r_m| &\leq |x| \label{eq:00001}
+    \end{align}
+    \item We also compare $\mathbf{C}_2$ with one where $B$ is separated into two components: one composed of $r_1 \cup x$ and the other containing the remaining points, $r_2 \cup r_3 \cup \dots \cup r_m$ points. Then, \begin{align}
+        |r_1| \left( \sum_{j \ge 2} |r_j| \right) &\le |x| \left( \sum_{j \ge 2} |r_j| \right) \nonumber\\
+        \implies |r_1| &\le |x| \label{eq:00002}
+    \end{align}
+\end{enumerate}
+%By symmetric arguments, we can claim that $\forall i = 1,2,\dots,m$, $|x| \ge |r_i|$.
+It follows from \eqref{eq:00001} and \eqref{eq:00002} that $|x| \ge \frac12 \sum_{i=1}^{m} |r_i|$.\\
+
+We now consider a second case, when there exists a cluster, $B'$ in $\mathbf{C}_2$ composed of vertices from just one kind of original cluster, say from $R_1$ and possibly some vertices from $X$. If $B'$ contains all vertices in $R_1$, then as per the theorem statement, then after removing all vertices from $x$, the number of remaining bad points in this cluster is $0$.
+
+Consider $R_1$ being separated into multiple smaller clusters $r_{11}, r_{12}, r_{13}, \dots, r_{1t}$ each associated with some points. Let us assume that there is one of each possible kind of cluster:
+% \begin{enumerate}
+%     \item[$\mathbf{c}_1$:] contains $r_{11}$ and some $x_1 \subseteq X$.
+%     \item[$\mathbf{c}_2$:] contains $r_{12}$ and for every $i \ge 2$, some $r_i \subseteq R_i$ (not all $0$) and some $x_2 \subseteq X$.
+%     \item[$\mathbf{c}_3$:] contains $r_{13}$ and some $x_3 \subseteq X$.
+%     \item[$\mathbf{c}_4$:] $r_{14}$ in its own cluster.
+% \end{enumerate}
+\begin{enumerate}
+    \item Consider the clusters $\mathbf{c}_1$, and $\mathbf{c}_2$.
+    \begin{enumerate}
+        \item From previous arguments we have that $|x_2| \ge |r_{12}|$. Therefore, if $|r_{11}| \leq |r_{12}|$, then $|x_2| \ge |r_{11}|$. But we also know that $|x_2| \ge \frac12 (|r_{12}| + |r_2| + \dots + |r_m|)$. Hence, $|x_2| = \Omega (|r_{11}|+|r_{12}|+|r_2|+\dots+|r_m|)$.
+        \item If $|r_{11}| \ge |r_{12}|$, then moving $r_{12}$ out of cluster $\mathbf{c}_2$ and merging with cluster $\mathbf{c}_1$, the cost must increase. Therefore,
+        \begin{align*}
+            |r_{12}| \left(|r_{11}| + |r_2| + |r_3| + \dots + |r_m| \right) &\le |x_2| |r_{12}|\\
+            \implies (|r_{11}| + |r_2| + |r_3| + \dots + |r_m|) &\le |x_2|
+        \end{align*}
+        Once again, using previous arguments, $|x_2| \ge |r_{12}|$, we have that $|x_2| = \Omega (|r_{11}| + |r_{12}| + |r_2| + \dots + |r_m|)$.
+    \end{enumerate}
+    \item Consider clusters $\mathbf{c}_1$, and $\mathbf{c}_3$.
+    \begin{enumerate}
+        \item If $|r_{11}| \le |r_{13}|$, then merging $r_{11}$ with cluster $\mathbf{c}_3$ must increase the cost. Then,
+        \begin{align*}
+            &|r_{11}| |r_{13}| \le (|x_1| + |x_3|) |r_{11}|,\\
+            \implies &|r_{13}| \le |x_1| + |x_3|,\\
+            \implies &\frac12 (|r_{11}|+|r_{13}|) \le |x_1| + |x_3|.
+        \end{align*}
+    \end{enumerate}
+    \item Consider clusters $\mathbf{c}_1$ and $\mathbf{c}_4$. Then,
+    \begin{enumerate}
+        \item If $|r_{11}| \le |r_{14}|$, then merging $r_{11}$ with $\mathbf{c}_4$ must increase the cost. Therefore,
+        \begin{align*}
+            |r_{11}| &|r_{14}| \le |x_1| |r_{11}|,\\
+            \implies &|r_{14}| \le |x_1|.
+        \end{align*}
+        \item Else if $|r_{11}| \ge |r_{14}|$, then merging $|r_{14}|$ with $\mathbf{c}_1$ gives,
+        \begin{align*}
+            |r_{11}| &|r_{14}| \le |x_1| |r_{14}|,\\
+            \implies &|r_{11}| \le |x_1|,\\
+            \implies &|r_{14}| \le |x_1|.
+        \end{align*}
+    \end{enumerate}
+\end{enumerate}
+
+From the inequalities derived in Cases 1,2 and 3, the total number of points in clusters of the form $\mathbf{c}_1$, $\mathbf{c}_2$ and $\mathbf{c}_3$ is $\mathcal{O} (X)$. Therefore, removing all these points, the only remaining points are in clusters of the form $\mathbf{c}_4$. By definition, these are perfectly clustered and not bad points. Therefore, removing $\mathcal{O} (X)$ points, the cost can be made $0$.
+\end{proof}
+
+So we see from the above two theorems that solving the correlation clustering optimally gives us a way of solving the robust problem too.
+
+\section{Robust correlation clustering in approximate setting makes sense}
+
+Consider a dataset of $n$ points in $\sqrt{n}$ buckets of $\sqrt{n}$ points each arranged in a grid-like fashion. Points within a bucket are simialr to each other, while points lying 
+ that perfect clustering exists with each row being one cluster. So, there are $\sqrt{n}$ clusters, each containing $\sqrt{n}$ points. Now consider adding $\sqrt{n}$ points as outliers in order to disturb the clustering. Let each of these newly added point have only positive edges associated with them. For this new dataset, the optimal clustering will still be row clusters with one newly added point each. Hence, each cluster will now contain $\sqrt{n}+1$ points, and the cost of this optimal clustering is $O(n\sqrt{n})$. Now consider the other clustering: with each column as a cluster having one newly added point each. The cost of clustering is still $O(n\sqrt{n})$, but the vertex cover of bad points (as defined in previous sections) become $O(n)$. Hence, it is possible for an approximate optimal clustering to have a very large vertex cover compared to the original number of outliers that exist. Therefore, studying the robust correlation clustering problem is important.

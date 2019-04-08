@@ -1,0 +1,94 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage[utf8]{inputenc}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{problem}[theorem]{Problem}
+\newtheorem{algorithm}[theorem]{Algorithm}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{observation}[theorem]{Observation}
+
+\title{MSRI}
+%\author{devvrit.03 }
+\date{January 2019}
+
+\begin{document}
+
+\maketitle
+
+\section{Metric Partitioning}
+
+\textbf{Problem 1}: We are given a complete graph $G$ on $n$ vertices with each edge having either a value of +1 or a -1. We want to cluster the entire graph into partitions $P$ where each cluster in $P$ has some vertices. We define the cost associated with partitioning $P$ as:\\
+$c(P)$ = number of negative value edges within clusters + number of positive value edges across clusters.\\ We want to find the minimum cardinality of vertex set $V$ such that $G\backslash V$ has a partitioning with $c(P)=0$.
+\\
+The above problem can be expressed using the following IP:
+\begin{align*}
+Min\; z &= \Sigma_{a\in V(G)} Y_{a}
+\end{align*}
+\begin{flushleft}
+Given constraints:
+\end{flushleft}
+\begin{align*}
+\Sigma_{E(u,v)^{+1}} Y_{u} + Y_{v} &\geq x(u,v)\\
+\Sigma_{E(u,v)^{-1}} Y_{u} + Y_{v} &\geq 1-x(u,v)\\
+\forall(u,v,w):\; x(u,v)&\leq x(u,w) +  x(v,w)\\
+\forall(u,v,w):\; x(u,v), Y_{u} &= 0 \;or \;1
+\end{align*}
+
+Clearly $x(u,v)$ forms a metric. Also, $x(u,v)=0$ will mean that vertices $u$ and $v$ are in same cluster, else in different clusters.
+We also know the following existing result:\\
+
+
+\textbf{Clustering Method 1}: There exists a way to partition metric space $(X,d)$ into partitions $P$ with arguments $\Delta>0$ such that following are satisfied:
+\begin{itemize}
+    \item Each cluster $C$ in $P$ has diameter at most $\Delta$
+    \item For every $x$ and $y$, the Prob($P(x)\neq P(y)) \leq  \frac{log(n)*d(x,y)}{\Delta}$ 
+\end{itemize}
+
+We construct a partitioning $P$ for the \textbf{Problem 1} giving $\Delta$ as, say, 1/4.\\
+Consider negative edges first.
+\begin{enumerate}
+    \item Case 1: $x(u,v)\geq \Delta$. In this case, $P(x)\neq P(y)$.
+    \item Case 2: $x(u,v) < \Delta$. In this case we run a similar algorithm to that of vertex cover and select round value $Y_a$ to 1 if $Y_a \geq \Delta /2$
+\end{enumerate}
+The motivation to do so is that if edge $(u,v)$ has value -1, then we want them in different clusters. Case 1 ensures they are in different clusters, Case 2 forms a vertex cover amongst the remaining constraints to ensure each negative edge is removed from the graph.
+
+For positive edges:
+\begin{enumerate}
+    \item Case 1: 
+\end{enumerate}
+
+\section{Scratch Space}
+
+\begin{proposition}
+Clustering algorithm: samples points with probability $f(d_{uv})$.
+What do we know: average distance being small in a cluster is good
+We also know: long distance edges being cut with higher probabilities is good while smaller edges are better off not being cut.
+\end{proposition}
+Probability that $u$ and $v$ are separated:
+Probability that they are settled + probability that they are cut
+
+settled: they lie in same cluster $u$ for some increasing function $f$
+Let $P_{uv}^w = (1-f(d_{uw})) f(d_{vw}) + (1-f(d_{vw})) f(d_{uw})$ (exactly one) and $Q_{uv}^w = f(d_{vw}) f(d_{uw})$ (neither)
+
+\begin{align}
+P (u,v \text{ cut}) &= \frac{\sum_w P_{uv}^w}{|V|} + \sum_{\vec{w} \in ^{|V|}P_{2}} \frac{Q_{uv}^{\vec{w}_1} P_{uv}^{\vec{w}_2} }{^{|V|}P_{2}} +\cdots
+\label{eq:q123}
+\end{align}
+
+
+% \begin{align}
+% P (u,v \text{ cut}) &= \sum_i P (u,v \text{ settled in } i^{th} \text{ iteration}) \nonumber\\
+% &= \sum_w P^w_{uv} \underbrace{ \left(1 + \frac{\sum_{z \ne w} Q^z_{uv}}{|V|} + \frac{\sum_{z_1,z_2 \in\binom{|V| \setminus w}{2}} Q_{uv}^{z_1} Q_{uv}^{z_2}}{\binom{|V|}{2}} + \cdots \right)}_{\overset{\mathrm{def}}{=} F_{u,v}^w} \label{eq:q123}
+% \end{align}
+% Define:
+% \begin{equation*}
+%     f(d_{uw}) = 
+%     \begin{cases}
+%     e^{d_{uw}-r^*}, \qquad &d_{uw} \le r^* \\
+%     1, & d_{uw} \ge r^*
+%     \end{cases}
+% \end{equation*} Then, $Q_{uv}^z = f(d_{uz}) f(d_{vz}) = e^{d_{uz} - r^*} \cdot e^{d_{vz} - r^*}$. Therefore,
+% $P^w_{uv} \le 1 - e^{d_{uv} - 2r^*}$, Then, \eqref{eq:q123} becomes
+
+\end{document}

@@ -1,0 +1,382 @@
+%\documentclass[a4paper,UKenglish]{lipics}
+\documentclass[11pt]{article}
+\usepackage{microtype}%if unwanted, comment out or use option "draft"
+\usepackage{xspace}
+\usepackage{bbm}
+%\usepackage{times}
+\usepackage{graphicx}
+%\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{amsmath,amssymb,amsthm}
+
+\usepackage{paralist}
+\usepackage{bm}
+\usepackage{xspace}
+\usepackage{url}
+\usepackage{fullpage, prettyref}
+\usepackage{boxedminipage}
+\usepackage{wrapfig}
+\usepackage{ifthen}
+\usepackage{color}
+\usepackage{xcolor}
+%\usepackage[noend]{algorithmic}
+%\usepackage{algorithmicx}
+%\usepackage[noend]{algcompatible}
+\usepackage{algpseudocode}
+
+\usepackage{algorithm}
+\usepackage{fullpage}
+\usepackage{hyperref}
+\usepackage[compact]{titlesec}
+\usepackage{cleveref}
+\usepackage{nicefrac}
+
+\usepackage[bottom=1in,top=1in,left=1in,right=1in]{geometry}
+\makeatletter
+ \setlength{\parindent}{0pt}
+ \addtolength{\partopsep}{-2mm}
+ \setlength{\parskip}{5pt plus 1pt}
+ %\addtolength{\theorempreskipamount}{-1mm}
+ %\addtolength{\theorempostskipamount}{-1mm}
+ \addtolength{\abovedisplayskip}{-3mm}
+ %\addtolength{\belowcaptionskip}{-6mm}
+ % \addtolength{\textheight}{20pt}
+ %\addtolength{\footskip}{-20pt}
+\makeatother
+
+\usepackage{framed}
+\renewenvironment{leftbar}[1][\hsize]
+{%
+    \def\FrameCommand
+    {%
+        {\color{gray}\vrule width 4pt}%
+        \hspace{1pt}%must no space.
+        \fboxsep=\FrameSep\colorbox{gray!20}%
+    }%
+    \MakeFramed{\hsize#1\advance\hsize-\width\FrameRestore}%
+}
+{\endMakeFramed}
+
+% For restating theorems in appendix
+\usepackage{thmtools}
+\usepackage{thm-restate}
+\declaretheorem[numberwithin=section]{theorem}
+\declaretheorem[sibling=theorem]{lemma}
+\declaretheorem[sibling=theorem]{claim}
+\declaretheorem[sibling=theorem]{corollary}
+%\newtheorem{theorem}{Theorem}[section]
+%\newtheorem{conjecture}[theorem]{Conjecture}
+%\newtheorem{lemma}[theorem]{Lemma}
+%\newtheorem{claim}[theorem]{Claim}
+%\newtheorem{corollary}[theorem]{Corollary}
+%\newtheorem{definition}[theorem]{Definition}
+\newtheorem{problem}[theorem]{Problem}
+\newtheorem{definition}[theorem]{Definition}
+\crefname{claim}{claim}{claims}
+
+%\newtheorem{fact}[theorem]{Fact}
+%\newtheorem{example}[theorem]{Example}
+%\newtheorem{assumption}[theorem]{Assumption}
+%\newtheorem{observation}[theorem]{Observation}
+%\newtheorem{remark}[theorem]{Remark}
+
+%\newcommand{\opt}{{\tt opt}\xspace}
+
+\newcommand{\ex}{{\mathbb E}}
+\newcommand{\pr}{{\mathbb P}}
+
+\usepackage[colorinlistoftodos,textsize=tiny,textwidth=2cm,color=red!25!white,obeyFinal]{todonotes}
+\newcommand{\nnote}[1]{\todo[color=blue!25!white]{N: #1}\xspace}
+\newcommand{\dnote}[1]{\todo[color=green!25!white]{D: #1}\xspace}
+\newcommand{\rnote}[1]{\todo[color=red!25!white]{R: #1}\xspace}
+
+%\newcommand{\comment}[1]{\textit {\em \color{red} \footnotesize *}\marginpar{\tiny{\color{blue} #1}}}
+% \renewcommand{\comment}[1]{\textit {\em \color{blue} \footnotesize[#1]}\marginpar{\tiny\textsc{\color{blue} To Do!}}}
+% \newcommand{\mcomment}[1]{\textbf {\em \color{red} \footnotesize[#1]}\marginpar{\tiny\textsc{\color{red} PLEASE CHECK}}}
+
+\newcommand{\ignore}[1]{}
+
+%\usepackage{cleveref}
+
+
+%\bibliographystyle{plain}% the recommended bibstyle
+
+\newcommand{\nukc}{{\sf NUkC}\xspace}
+\newcommand{\kcwo}{{\sf kCwO}\xspace}
+\newcommand{\rmfc}{{\sf RMFC-T}\xspace}
+\newcommand{\Itree}{\ensuremath{{\cal I}_T}\xspace}
+\newcommand{\I}{\ensuremath{{\cal I}}\xspace}
+\newcommand{\treepath}{\ensuremath{\sf treePath}\xspace}
+\newcommand{\cov}{\ensuremath{{\sf Cov}}\xspace}
+\newcommand{\sse}{\ensuremath{\subseteq}\xspace}
+
+%\newtheorem{claim}{Claim}
+
+\newcommand{\cA}{{\cal A}}
+\newcommand{\cB}{\mathcal{B}}
+\newcommand{\cC}{{\cal C}}
+\newcommand{\cD}{\mathcal{D}}
+\newcommand{\cE}{{\cal E}}
+\newcommand{\cF}{\mathcal{F}}
+\newcommand{\cG}{\mathcal{G}}
+\newcommand{\cH}{{\cal H}}
+\newcommand{\cI}{{\cal I}}
+\newcommand{\cJ}{{\cal J}}
+\newcommand{\cL}{{\cal L}}
+\newcommand{\cM}{{\cal M}}
+\newcommand{\cP}{\mathcal{P}}
+\newcommand{\cQ}{\mathcal{Q}}
+\newcommand{\cR}{{\cal R}}
+\newcommand{\cS}{\mathcal{S}}
+\newcommand{\cT}{{\cal T}}
+\newcommand{\cU}{{\cal U}}
+\newcommand{\cV}{{\cal V}}
+\newcommand{\cX}{{\cal X}}
+
+
+%\DeclareMathOperator*{\argmax}{arg\,max}
+
+
+\newcommand{\R}{\mathbb R}
+\newcommand{\N}{\mathbb N}
+\newcommand{\F}{\mathbb F}
+\newcommand{\Z}{{\mathbb Z}}
+\newcommand{\eps}{\varepsilon}
+\newcommand{\lam}{\lambda}
+\newcommand{\sgn}{\mathrm{sgn}}
+
+
+\newcommand{\poly}{\mathrm{poly}}
+\newcommand{\polylog}{\mathrm{polylog}}
+\newcommand{\polyloglog}{\mathrm{\poly\log\log}}
+\newcommand{\littlesum}{\mathop{{\textstyle \sum}}}
+\newcommand{\half}{{\textstyle \frac12}}
+\newcommand{\la}{\langle}
+\newcommand{\ra}{\rangle}
+\newcommand{\wh}{\widehat}
+\newcommand{\wt}{\widetilde}
+\newcommand{\calE}{{\cal E}}
+\newcommand{\calL}{{\cal L}}
+\newcommand{\calF}{{\cal F}}
+\newcommand{\calW}{{\cal W}}
+\newcommand{\calH}{{\cal H}}
+\newcommand{\calN}{{\cal N}}
+\newcommand{\calO}{{\cal O}}
+\newcommand{\calP}{{\cal P}}
+\newcommand{\calV}{{\cal V}}
+\newcommand{\calS}{{\cal S}}
+\newcommand{\calT}{{\cal T}}
+\newcommand{\calD}{{\cal D}}
+\newcommand{\calC}{{\cal C}}
+\newcommand{\calX}{{\cal X}}
+\newcommand{\calY}{{\cal Y}}
+\newcommand{\calZ}{{\cal Z}}
+\newcommand{\calA}{{\cal A}}
+\newcommand{\calB}{{\cal B}}
+\newcommand{\calG}{{\cal G}}
+\newcommand{\calI}{{\cal I}}
+\newcommand{\calJ}{{\cal J}}
+\newcommand{\calR}{{\cal R}}
+\newcommand{\calK}{{\cal K}}
+\newcommand{\calU}{{\cal U}}
+\newcommand{\barx}{\overline{x}}
+\newcommand{\bary}{\overline{y}}
+
+\newcommand{\ba}{\boldsymbol{a}}
+\newcommand{\bb}{\boldsymbol{b}}
+\newcommand{\bp}{\boldsymbol{p}}
+\newcommand{\bt}{\boldsymbol{t}}
+\newcommand{\bv}{\boldsymbol{v}}
+\newcommand{\bx}{\boldsymbol{x}}
+\newcommand{\by}{\boldsymbol{y}}
+\newcommand{\bz}{\boldsymbol{z}}
+\newcommand{\br}{\boldsymbol{r}}
+\newcommand{\bh}{\boldsymbol{h}}
+
+\newcommand{\bA}{\boldsymbol{A}}
+\newcommand{\bD}{\boldsymbol{D}}
+\newcommand{\bG}{\boldsymbol{G}}
+
+\newcommand{\bR}{\boldsymbol{R}}
+\newcommand{\bS}{\boldsymbol{S}}
+\newcommand{\bX}{\boldsymbol{X}}
+\newcommand{\bY}{\boldsymbol{Y}}
+\newcommand{\bZ}{\boldsymbol{Z}}
+
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\RR}{\mathbb{R}}
+
+\newcommand{\abs}[1]{\left\lvert #1 \right\rvert}
+\newcommand{\norm}[1]{\left\lVert #1 \right\rVert}
+\newcommand{\ceil}[1]{\lceil#1\rceil}
+\newcommand{\Exp}{\EX}
+\newcommand{\floor}[1]{\lfloor#1\rfloor}
+
+\newcommand{\EX}{\hbox{\bf E}}
+\newcommand{\prob}{{\rm Prob}}
+
+\newcommand{\gset}{Y}
+\newcommand{\gcol}{{\cal Y}}
+
+\newcounter{myLISTctr}
+\newcommand{\initOneLiners}{%
+    \setlength{\itemsep}{0pt}
+    \setlength{\parsep }{0pt}
+    \setlength{\topsep }{0pt}
+%
+}
+\newenvironment{OneLiners}[1][\ensuremath{\bullet}]
+    {\begin{list}
+        {#1}
+        {\initOneLiners}}
+    {\end{list}}
+
+
+% \newcounter{note}[section]
+% \renewcommand{\thenote}{\thesection.\arabic{note}}
+% %\renewcommand{\thenote}{\arabic{note}}
+% \newcommand{\agnote}[1]{\refstepcounter{note}$\ll${\bf Anupam~\thenote:}
+%   {\sf \color{red} #1}$\gg$\marginpar{\tiny\bf AG~\thenote}}
+% \newcommand{\aknote}[1]{\refstepcounter{note}$\ll${\bf Amit~\thenote:}
+%   {\sf \color{green} #1}$\gg$\marginpar{\tiny\bf AK~\thenote}}
+% \newcommand{\dpnote}[1]{\refstepcounter{note}$\ll${\bf Debmalya~\thenote:}
+%   {\sf \color{blue} #1}$\gg$\marginpar{\tiny\bf DP~\thenote}}
+% \newcommand{\rknote}[1]{\refstepcounter{note}$\ll${\bf Ravi~\thenote:}
+%   {\sf \color{blue} #1}$\gg$\marginpar{\tiny\bf RK~\thenote}}
+
+% Author macros::begin %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\Opt}{\ensuremath{\mathsf{Opt}}\xspace}
+\newcommand{\lp}{\mathsf{Lp}}
+
+\newcommand{\Ucomp}{\overline{U}}
+%\newcommand{\opt}{\mathsf{opt}}
+\newcommand{\x}{\mathbf{x}}
+\newcommand{\seq}{\pmb{\sigma}}
+\newcommand{\density}{\rho}
+\newcommand{\univ}{A}
+
+
+\newcommand{\bn}{{(n)}}
+\newcommand{\bk}{{(k)}}
+\renewcommand{\bt}{{t}}
+\newcommand{\il}{{\tt in}}
+\renewcommand{\cov}{{\tt cov}}
+\newcommand{\low}{{\tt low}}
+\newcommand{\mysp}{\hspace*{0.2 in}}
+\newcommand{\St}{\calS_\bt}
+\newcommand{\At}{\univ_\bt}
+\newcommand{\Lt}[1]{\calL_\bt({#1})}
+\newcommand{\Et}[1]{\At(#1)}
+\newcommand{\dt}{\density_\bt}
+\newcommand{\vt}{\mathsf{vol}}
+\newcommand{\nt}{n_\bt}
+\newcommand{\Nt}{N_\bt}
+\newcommand{\ft}{f_\bt}
+\newcommand{\lt}{{l_\bt}}
+\newcommand{\covt}{\cov_\bt}
+\newcommand{\ini}{\ensuremath{\mathsf{init}\xspace}}
+\newcommand{\fin}{\ensuremath{\mathsf{fin}\xspace}}
+
+
+
+\usepackage{caption}
+
+
+\DeclareCaptionFormat{algor}{%
+  \hrulefill\par\offinterlineskip\vskip1pt%
+    \textbf{#1#2}#3\offinterlineskip\hrulefill}
+\DeclareCaptionStyle{algori}{singlelinecheck=off,format=algor,labelsep=space}
+\captionsetup[algorithm]{style=algori}
+
+% Title::begin %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\title{Robust Correlation Clustering}
+\author{Devvrit\thanks{BITS Pilani, Goa Campus. Email: {\tt devvrit.03@gmail.com}}
+\and Ravishankar Krishnaswamy\thanks{Microsoft Research India. Email: {\tt rakri@microsoft.com}}
+\and Nived Rajaraman\thanks{IIT Madras. Email: {\tt nived.rajaraman@gmail.com}}}
+\date{}
+
+\input include.tex
+\begin{document}
+
+\maketitle
+
+\input abstract.tex
+
+\thispagestyle{empty}
+\setcounter{page}{0}
+\clearpage
+
+\input intro.tex
+\input bad-example.tex
+\input hardness.tex
+\input complete-graphs.tex
+\input general-graphs.tex
+
+
+%\agnote{Send mail asking him for permission.}
+
+\newpage
+
+\section*{Appendix}
+
+\appendix
+
+\newpage
+{\small
+%\bibliography{bib}
+\bibliographystyle{amsalpha}
+}
+
+%\appendix
+%\newpage
+
+
+%\input{frac-algo.tex}
+
+%\input{hardness.tex}
+
+%\input qns
+%\input{combo}
+
+%\newpage
+%\listoftodos
+
+\end{document}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
