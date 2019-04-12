@@ -3,3 +3,9 @@
 2. Weighted analogue of the problem where vertices have removal cost.
 3. Think about combinatorial algorithms for this problem.
 4. General budgeted problem where vertices have a removal cost and edges have a misclassification penalty.
+
+
+
+to comment that we can't do better than 3 approximation in number of vertices to remove in (alpha,beta) bi criterion on complete graphs.
+To comment that combinatorial is indeed a combinatorial algorithm.
+PCC robudt to outlier Algorithm.

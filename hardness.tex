@@ -1,26 +1,68 @@
-\section{Hardness of $m$-Robust Correlation Clustering}
+\section{Hardness of Perfect Correlation Clustering (PCC)}
 
+\begin{theorem}
+It is $\NP$-hard to decide whether, the decision version of Perfect Correlation Clustering is inapproximable to a factor smaller than $10 \sqrt{5} - 21 = 1.3606\dots$, assuming $\mathrm{P} \ne \NP$. In other words, consider a dataset, removing $k$ vertices from which is perfectly clusterable. Then, it is $\NP$-hard to decide whether there exists fewer than $(10 \sqrt{5} - 21)k$ vertices, removing which, the dataset is perfectly clusterable.
+\end{theorem}
 \begin{proof}
-Consider a simple case - there are just 20 points that naturally form a bipartite ($0$ cost) clustering into 10 points each. Points in the one cluster are similar to each other and dissimlar to points in the other cluster. The edge between point $v_{10}$ in cluster $C_1$ and $v_{20}$ in cluster $C_2$ is changed from a $-$ to a $+$. For this graph, the clustering $\{ C_1,C_2 \}$ is still optimal, now having cost $1$ (since there can be no clusteing of cost $0$). This is shown in Fig.~\ref{fig:1}.
+The proof follows by an approximation preserving reduction from vertex cover. Consider any unlabelled arbitrary graph, $G = (V,E)$ on $n$ vertices. Let the vertices in $V$ be numbered in arbitrary order as $1,2,\dots,n$. We construct an instance of PCC as follows.
 
-\begin{figure}[ht]
-\centering
-\includegraphics{./img/bipartite.pdf}
-\caption{20 points in 2 clusters. $C_1$ and $C_2$ are "natural" clusters}
-\label{fig:1}
-\end{figure}
+%Consider a simple case - there are just 20 points that naturally form a bipartite ($0$ cost) clustering into 10 points each. Points in the one cluster are similar to each other and dissimlar to points in the other cluster. The edge between point $v_{10}$ in cluster $C_1$ and $v_{20}$ in cluster $C_2$ is changed from a $-$ to a $+$. For this graph, the clustering $\{ C_1,C_2 \}$ is still optimal, now having cost $1$ (since there can be no clusteing of cost $0$). This is shown in Fig.~\ref{fig:1}.
 
-Now consider a case where instead of $20 = 2 \times 10$ points, there are $n$ points arranged into $N = 0.1n$ natural clusters with 10 points in each. All 10 points in a cluster are similar to each other and points in different clusters are dissimilar to each other. This is denoted the "natural" clustering which has a cost of $0$ and its components are known as natural clusters.\\
+% \begin{figure}[ht]
+% \centering
+% \includegraphics{./img/bipartite.pdf}
+% \caption{20 points in 2 clusters. $C_1$ and $C_2$ are "natural" clusters}
+% \label{fig:1}
+% \end{figure}
 
-\noindent Now, from each of the $N$ natural clusters, one point is selected and labelled a "bad" point of that cluster. Consider the complete subgraph induced by the bad vertices and swap edges between some pairs of points in this subgraph from $-$ to $+$. This will be the graph we consider in the proof of hardness. Observe that the optimal clustering in this graph is still the natural clustering having cost equal to the total number of $- \to +$ swaps made. This is because points from any two natural clusters cannot be separated with cost lower than $1$ (refer to the paragraph above Fig.~\ref{fig:1}). The natural clustering achieves the least cost for all pairs of clusters - it is $1$ if the edge between bad vertices of the two natural clusters is swapped from $-$ to $+$ and $0$ if not.
+%Now consider a case where instead of $20 = 2 \times 10$ points,
+%This is denoted the "natural" clustering which has a cost of $0$ and its components are known as natural clusters.\\
 
-\begin{figure}[ht]
-\centering
-\includegraphics{./img/multipartite.pdf}
-\caption{$n$ points with $N$ "natural" clusters - $C_1, C_2, \dots, C_N$}
-\label{fig:2}
-\end{figure}
+\paragraph{Construction of $\NP$-hard PCC instances}
+Construct a dataset having $2n$ points arranged into $n$ buckets, each having $2$ points. Pairs of points within the same bucket are separated by a $+$, while pairs of points in different buckets are separated by a $-$. From each of the $n$ buckets, one point is selected arbitrarily and labelled a \textit{bad vertex} of that bucket. The set of bad vertices are numbered in arbitrary order as $1,2,\dots,n$. An instance of PCC, denoted $\mathbf{I}_G$ is constructed from $G$ as follows: for every pair of vertices $i,j \in V$ if $(i,j) \in E$, then set $\sign (i,j)$ to $+$ from $-$. $B_i$ denotes the bucket corresponding to bad vertex $i$.
 
-In robust correlation clustering, we need to remove $m$ vertices such that the cost of the natural (optimal) clustering on the resultant subgraph is minimized. The choice of these vertices must be from the set of bad vertices, since other vertices do not reduce the clustering cost. Consider an unweighted graph $G'$ defined on the $N$ bad vertices such that if two bad vertices are similar, they have an edge between them and if they are dissimilar, there is no edge between them. This graph captures the $- \to +$ swaps made previously. The goal is to then pick $m$ vertices from this graph such that their removal results in the least number of edges left over. This problem is as hard as vertex cover, since if I can solve it, I can decide if there is a vertex cover of size $m$ (if it is a vertex cover, the number of remaining edges will be $0$. If it is not, the number of edges will be $> 0$). Therefore, it is NP-hard to solve $m$-robust correlation clustering.
+We are now ready to show the hardness reduction.
+
+\begin{lemma}
+Let $\opt (\mathbf{I}_G)$ denote the minimum set of vertices to remove from the instance $\mathbf{I}_G$ to make it perfectly clusterable. Then, $|\opt (\mathbf{I}_G )| = |VC(G)|$, where $VC(G)$ is the minimum vertex cover of the graph $G$.
+\end{lemma}
+%Observe that the optimal solution to this correlation clustering instance places each bucket of points in an independent cluster.
+
+In order to prove this statement, we claim that (i) $|\opt (\mathbf{I}_G) \le |VC(G)|$ and (ii) $|\opt (\mathbf{I}_G) \ge |VC(G)|$.
+\begin{claim}
+$|\opt (\mathbf{I}_G)| \le |VC(G)|$
+\end{claim}
+Recall that $\opt (\mathbf{I}_G)$ is the minimum set of vertices removing which the instance $\mathbf{I}_G$ is perfectly clusterable. In order to show an upper bound to $\opt (\mathbf{I}_G)$, it is sufficient to fix an explicit clustering and compute the minimum number of vertices that need to be removed from this clustering to bring its cost to $0$.
+
+So, consider a clustering, $\mathcal{C}$ where each bucket is placed in an independent cluster. Then, the set of mis-classified edges are nothing but the set of $+$ edges between bad vertices. Recall that by the labelling of vertices in $G$, $VC(G)$ can be represented as a subset of $\{1,2,\dots,n\}$. Removing the vertices labelled $VC(G)$ from the instance $\mathbf{I}_G$ is guaranteed to reduce the cost of the clustering $\mathcal{C}$ to $0$, since at least one end point of every mis-classified edge is removed (by definition of vertex cover).
+
+\begin{claim} \label{lemma:01321923}
+$|\opt (\mathbf{I}_G)| \ge |VC(G)|$
+\end{claim}
+In order to prove this lemma, we begin with the following claim.
+
+\begin{claim}
+For every pair of bad vertices $(i,j)$, such that $\sign (i,j) = +$, at least one vertex must be removed from either $B_i$ or $B_j$ for the cost of any clustering to be $0$.    
+\end{claim}
+\begin{proof}
+Let the 2 points in $B_i$ be denoted $i$ and $i_1$ and likewise for $B_j$, $j$ and $j_1$. Then, for the cost of any clustering to be $0$, all the 4 points must be in the same cluster, since $\sign(i_1,i) = \sign (i,j) = \sign(j,j_1) = +$. However, even in this case $\sign(i_1,j_1) = -$ which incurs a cost of at least $1$.
+\end{proof}
+
+In order to prove Lemma \ref{lemma:01321923}, construct a graph $H$, where every node corresponds to a bucket and nodes corresponding to $B_i,B_j$ have an edge between them if $\sign (i,j) = +$. Consider the minimum set of nodes $S_{\min}$, such that every pair of buckets separated by a $+$ have at least one vertex chosen. In other words, every edge $(i,j)$ in $H$ has at least one point chosen from either $B_i$ or $B_j$. Any set of $B_i$ that have at least one vertex chosen from them cannot be less than $|VC(H)|$, by definition of minimum vertex cover. Therefore,
+\begin{equation*}
+	|S_{\min}| \ge |VC(H)| = |VC(G)|.
+\end{equation*}
+where the last equality follows from the fact that $H$ is isomorphic to $G$.
+
+% \begin{figure}[ht]
+% \centering
+% \includegraphics{./img/multipartite.pdf}
+% \caption{$n$ points with $N$ "natural" clusters - $C_1, C_2, \dots, C_N$}
+% \label{fig:2}
+% \end{figure}
+
+Therefore, $\mathbf{I}_G$ optimally, outputs $|VC(G)|$. Therefore, Robust Correlation Clustering is NP-hard.
+
+%In robust correlation clustering, we need to remove $m$ vertices such that the cost of the natural (optimal) clustering on the resultant subgraph is minimized. The choice of these vertices must be from the set of bad vertices, since other vertices do not reduce the clustering cost. Consider an unweighted graph $G'$ defined on the $N$ bad vertices such that if two bad vertices are similar, they have an edge between them and if they are dissimilar, there is no edge between them. This graph captures the $- \to +$ swaps made previously. The goal is to then pick $m$ vertices from this graph such that their removal results in the least number of edges left over. This problem is as hard as vertex cover, since if I can solve it, I can decide if there is a vertex cover of size $m$ (if it is a vertex cover, the number of remaining edges will be $0$. If it is not, the number of edges will be $> 0$). Therefore, it is NP-hard to solve $m$-robust correlation clustering.
 
 \end{proof}

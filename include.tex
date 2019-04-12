@@ -1,5 +1,20 @@
+
+\usepackage{comment}
 \newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{observation}[theorem]{Observation}
 
 \DeclareMathOperator*{\argmax}{arg\,max}
 \DeclareMathOperator*{\argmin}{arg\,min}
-\newcommand{\cost}{\mathrm{Cost}}
+\newcommand{\cost}{\mathsf{Cost}}
+\newcommand{\alg}{\mathsf{alg}}
+\newcommand{\NP}{\mathrm{NP}}
+\newcommand{\sign}{\textsc{Sign}}
+\newcommand{\vmc}{\textsc{Vertex-Multicut}}
+
+\makeatletter
+\newcommand{\setword}[2]{%
+  \phantomsection
+  #1\def\@currentlabel{\unexpanded{#1}}\label{#2}%
+}
+\makeatother
