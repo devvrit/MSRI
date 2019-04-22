@@ -1,124 +1,51 @@
+\section{LP-Rounding for \robcc}
+In this section, we design efficient bi-criteria approximation algorithms for \robcc (\Cref{prob:2}), thereby proving~\Cref{thm:complete1,thm:complete2}. We begin by recalling the problem setup: we are given an instance ${\cal I}$ of \robcc consisting of a graph $(V, E_{+}, E_{-})$ on $n$ points, where $E_{+}$ denotes the set of pairs of vertices which are similar to each other, and $E_{-}$ denotes the dissimilar pairs (since the problem is over complete graphs, we additionally have that $E_{+} \cup E_{-} = \binom{[n]}{2}$). The goal is to identify a set of vertices $D$ such that $|D| = m$, and a clustering $\mathcal{C}$ over $V\setminus D$ such that the total cost (number of $E_{+}$ edges going between clusters and $E_{-}$ edges staying within a cluster) of $\mathcal{C}$ is minimized.
 
-% \section{An expected $3$ approximation for correlation clustering}
+The main result of this section is an LP-based approximation algorithm, whose starting point is the following natural LP relaxation of the problem. In the LP relaxation below, there is a variable $z_{u,v}$ for each pair $(u,v)$ of vertices, which is the relaxation of the indicator variable for whether the corresponding edge is an edge the optimal solution will misclassify, i.e., it will be $1$ if the endpoints $u$ and $v$ are in different clusters and $(u,v) \in E_{+}$ \emph{or} if the endpoints $u$ and $v$ are in the same cluster and $(u,v) \in E_{-}$, and $0$ otherwise. The variable $y_u$ for each vertex $u$ denotes whether the optimal solution declares $u$ to be an outlier or not. Finally, there is a variable $x_{u,v}$ which denotes the cut-metric induced by the optimal clustering, i.e., $x_{u,v} = 1$ if and only if $u$ and $v$ are in different clusters of the clustering. 
 
-% 	\begin{align}
-% 		\min \qquad \sum_{i \in F, j \in C}x_{i, j} d^q(i, j) \tag{$\text{LP}_{\text{strong}}$} \qquad  \label{LP:strong}
-% 	\text{s.t.} \\
-% 		y_i &= 1 & & \forall i \in S_0 &\label{LPs:S0}\\
-% 		 x_{i,j} &= 0 & &\forall i, j \, \text { s.t } \, d(i,j) >  R_j & \label{LPs:R} \\
-% 	    \sum_{j} d^q(i,j) x_{i,j} & \leq \rho \tilde U y_i & & \forall i \notin S_0 & \label{LPs:star} \\[-6pt]
-% 	    x_{i,j} &= 0 & &\forall i \notin S_0, j \, \text { s.t } \, d^q(i,j) >  \rho \tilde U &\label{LPs:R-d}
-% 	\end{align}
-
-
-
-
-% \begin{algorithm}
-% \caption{{\sf Dynamic}$(e_\bt, \pm)$}
-% \label{alg:dynamicf}
-% \begin{algorithmic}[1]
-% \If{the operation $\sigma_\bt$ is $(e_\bt, +)$}
-% %%\State \mysp {\bf If} there is a set $S$ in $\St$ which contains $e_t$, assign $e_t$ to this set
-% \State  Set $\levelt(e) = \max_{S:e \in S} \levelt(S)$, and define $\yt(e)$ to be $\frac{1}{2^{\levelt(e)}}$.
-% \State  For all sets $S$ containing $e$
-% \State \spc Update $\yt(S) \leftarrow \yt(S) + \yt(e)$.
-% \State \spc Add $e$ to the appropriate list in $\lists(S)$, and build $\nodelist(e)$.
-% \State\spc  If $\yt(S) > \beta  c_S$, and $S$ is already not in $Q$, add it to $Q$.
-% \ElsIf{the operation $\sigma_\bt$ is $(e_\bt, -)$}
-% \State For all sets $S$ containing $e$ (traverse using $\nodelist(e)$)
-% \State  \spc Update $\yt(S) \leftarrow \yt(S) - \yt(e)$.
-% \State \spc Delete  $\nodelist(e)$ and all $\node(e,S)$.
-% \State \spc If $\yt(S) < \frac{c_S}{\beta}$, and $\levelt(S) > b_S$ and $S$ is not in $Q$, add $S$ to $Q$.
-% \EndIf
-% \State If $Q$ is non-empty, call \FIX.
-% \end{algorithmic}
-% %\end{center}
-% \end{algorithm}
-
-
-
-
-% We first describe the algorithm (Algorithm \ref{alg:CC:3apx}) [{\color{red} Aggregating Inconsistent Information: Ranking and Clustering, Nir Ailon, Moses Charikar, Alantha Newman}]:
-
-% \begin{algorithm} \label{alg:CC:3apx}
-% \begin{enumerate}
-%     \item Pick any point $v$ uniformly randomly.
-%     \item Form a cluster $C$ composed of $v$ with all points that share a $+$ edge with $v$.
-%     \item Remove $C$ from $V$ and recurse on the induced subgraph $V \setminus C$.
-% \end{enumerate}
-% \end{algorithm}
-
-% \begin{algorithm}
-% \caption{${\sf CharikarCC}(V,\sigma)$}
-% \label{alg:CharikarCC}
-% \begin{algorithmic}
-% \State \textbf{Input:} Dataset $V$; correlation clustering instance $\sigma : \binom{V}{2} \to \{ +,- \}$.
-% \State \textbf{Initialization:} $V_{nc} = V$. \Comment{Set of unclustered points among $V$}
-% \While{$V_{nc} \ne \phi$}
-% \State Sample $v \sim \mathrm{Unif} (V_{nc})$.
-% \State Define $C(v) = \{ u \in V_{nc} : \sign (u,v) = +\} \cup \{ v \}$ \Comment{Vertices similar to $v$ including $v$}
-% \State $V_{nc} \gets V_{nc} \setminus C(v)$.
-% \EndWhile
-% \end{algorithmic}
-% %\end{center}
-% \end{algorithm}
-
-% We set up the analysis as follows: we construct a graph $G$ where two vertices are connected by an edge if they share a positive edge and are disconnected if they share a negative edge. If two vertices $u$ and $v$ are true twins (they share the same set of neighbors in $V \setminus \{ u,v \}$) then Algorithm \ref{alg:CC:3apx} will not wrongly classify the edge $u,v$.\\
-
-% \noindent The number of mistakes made by the algorithm can be accounted as follows. In any iteration, let $V'$ denote the set of remaining (unclustered) vertices. Then, the number of mistakes made by forming a cluster $C$ centered at $u$ is equal to the number of points that form a triangle with $u$ having two positive and one negative edge in the induced subgraph on $V'$. This is because the remaining mistakes made by $C$ with previously clustered points are already accounted in the previous iterations.\\
-
-% \noindent Let us use $t$ to denote the triple $(u,v,w)$ where $\Delta uvw$ forms a bad triangle with two positive edges and one negative edge. Let $A_t^{(i)}$ denote the event that in iteration $i$, one of $u,v,w$ is chosen as a pivot and that $u,v,w$ belong to $V'$ in this recursive call of the algorithm. The total cost of the algorithm is then $\sum_i \sum_t \mathbbm{1} (A_t^{(i)})$ which is equal to $\sum_t A_t$ where $A_t$ denotes the event that one of $u,v,w$ is chosen as a pivot and that $u,v,w$ belong to $V'$ in the same recursive call of the algorithm.\\
-
-% \noindent Therefore, the expected cost of the algorithm is $\sum_t p_t$ where $p_t$ is the probability of $A_t$ occurring.\\
-
-%     \noindent Observe that any algorithm will have to pay a unit cost for each triangle among any set of edge disjoint triangles from $B$. Therefore, we construct an optimization problem that finds the maximum number of edge disjoint triangles from $B$ and conclude that the cost of $OPT$ is at least this much. Let $B$ denote the set of tuples $(u,v,w)$ corresponding to bad triangles $\Delta uvw$. We therefore consider the dual to a relaxed LP,
-
-% \begin{alignat}{3} \label{LP:CC-relax-dual}
-% 		&\text{Find: } && \argmax\ \sum_{t \in B} z_t, \nonumber\\
-% 		&\text{Subject to:} \quad && \forall e = (u,v) \in E ,\ \sum_{t \in B : u,v \in t} z_t \le 1, \nonumber\\
-% 		& && \forall t \in B,\ z_{t} \in [ 0,1 ].\tag{LP1}
-% \end{alignat}
-
-% We now show that the set of probabilities $\{ p_t / 3,\ t \in B \}$ forms a valid solution to this LP. This proves that the algorithm is $3$ approximate since any solution to \ref{LP:CC-relax-dual} is a lower bound to $OPT$. Consider any edge $e = (u,v)$ and the bad triangles $B_{uv} = \{ t_w : (u,v,w) \in B \}$ it is part of. For any of these bad triangles, if the third vertex $w$ is picked as a cluster center then $(u,v)$ will become misclassified. The probability that $w$ is picked conditioned on $A_{t_w}$ is $1/3$. Therefore, we have:
-% \begin{equation} \label{eq:0000}
-%     P ( (u,v) \text{ is misclassified}) = \sum_{t \in B_{uv}} \frac{1}{3} p_t.
-% \end{equation}
-% Therefore, for every edge $e = (u,v)$, $\sum_{t \in B_{uv}} \frac{1}{3} p_t \le 1$ and this forms a feasible fractional solution to \ref{LP:CC-relax-dual}.
-
-% \begin{figure}[H]
-% \centering
-% \includegraphics{./img/3apx.pdf}
-% \caption{An instance of Algorithm \ref{alg:CC:3apx}}
-% \label{fig:5}
-% \end{figure}
-
-\section{$m$-Robust Correlation Clustering}
-Consider a dataset of $n$ points. The $m$-Robust Correlation Clustering problem is to find a clustering $\mathcal{C}$ and output a set of vertices, $S$ such that $|S| = m$, such that $\mathcal{C}$ has least possible cost on edges that are not incident on $S$. In other words, the cost after removing vertices in $S$ is minimized.
-
-$m$-Robust Correlation Clustering can be formulated as the following Integer Program:
-
-\begin{alignat}{3} \label{IP:CC5}
-		\text{minimize} &\sum_{(u,v) \in E} z_{uv}, && \quad s.t., \tag{IP4}\\
-		x_{uv} &\le x_{uw} + x_{vw}, &&\qquad \forall u,v,w \in [n], \nonumber\\
-		Y_u + Y_v + z_{uv} &\ge x_{uv},&&\qquad \forall (u,v) \in E^+, \nonumber\\
-		Y_u + Y_v + z_{uv} &\ge 1 - x_{uv}, &&\qquad \forall (u,v) \in E^-, \nonumber\\
-		\sum_{u} Y_u &\le m, \nonumber \\
-		x_{uv} &\in \{ 0,1 \}, &&\qquad \forall u,v \in [n],\label{eq:d01}\\
-		z_{uv} &\in \{ 0,1 \}, &&\qquad \forall u,v \in [n],\label{eq:d02}\\
-		Y_u &\in \{ 0,1 \}, &&\qquad \forall u \in [n]. \label{eq:d03}
+\begin{alignat}{3} \label{LP:CC5}
+		\text{minimize} &\sum_{(u,v) \in E} z_{u,v}, && \quad s.t., \tag{LP5}\\
+		x_{u,v} &\le x_{u,w} + x_{v,w}, &&\qquad \forall u,v,w \in [n], \label{LP:CC5:1}\\
+		y_u + y_v + z_{u,v} &\ge x_{u,v},&&\qquad \forall (u,v) \in E^+, \label{LP:CC5:1}\\
+		y_u + y_v + z_{u,v} &\ge 1 - x_{u,v}, &&\qquad \forall (u,v) \in E^-, \label{LP:CC5:1}\\
+		\sum_{u} y_u &\le m, \label{LP:CC5:1} \\
+		x_{u,v} &\in [ 0,1 ], &&\qquad \forall u,v \in [n], \nonumber\\
+		z_{u,v} &\in [ 0,1 ], &&\qquad \forall u,v \in [n],\nonumber\\
+		y_u &\in [ 0,1 ], &&\qquad \forall u \in [n]. \nonumber
 \end{alignat}
 
-A triangle on any three points among the dataset is called a bad triangle if it consists of two $+$ edges and one $-$ edge. Let $B$ denote the set of bad triangles in the dataset. Intuitively, a bad triangle captures the smallest unit of inconsistency in the similarity information between datapoints: irrespective of how the vertices of a bad triangle are clustered, a cost of at least $1$ must be incurred. Therefore, in any $m$-Robust Correlation Clustering instance, for any $t = (u,v,w) \in B$ unless one of $u,v,w$ is removed, a cost of at least $1$ is incurred. Following the same logic, the $m$-Robust Correlation Clustering IP as presented through \ref{IP:CC5} can be relaxed to the following Integer Program:
+\begin{lemma} \label{lem:relaxation1}
+The LP \Cref{LP:CC5} is a valid LP relaxation for the \robcc problem. In other words, the objective value of an optimal LP solution is at most $\opt({\cal I})$, where $\opt({\cal I})$ is the objective value of an optimal \robcc solution to instance ${\cal I}$.
+\end{lemma}
 
-\begin{alignat}{3}
-    \text{minimize} \sum_{(u,v) \in \binom{V}{2}} z_{uv},& &&s.t. \label{IP3}\tag{IP3}\\
-    Y_u + Y_v + Y_w + z_{uv} + z_{vw} + z_{uw} \ge 1,& &&\forall t = (u,v,w) \in B , \nonumber\\
-    \sum_{u} Y_u \le m, & \nonumber\\
-	z_{uv} \in \{ 0,1 \}&\qquad && \forall (u,v) \in \binom{V}{2}, \label{eq:011} \\
-	Y_u \in \{0,1\}&, && \forall u \in V. \label{eq:002}
+\begin{proof}
+Proof is here.
+\end{proof}
+
+
+Our algorithm will in fact be based on a different LP relaxation for the problem, which is a natural extension of a very elegant LP relaxation for the original correlation clustering problem. We start with the following definition, which will be useful throughout the algorithm and analysis.
+\begin{definition}
+A triplet $(u,v,w)$ of points is said to be a \emph{bad triangle} if exactly two of the three edges among $(u,v), (v,w), (u,w)$ belong to $E_{+}$ and one to $E_{-}$. In words, there is exactly one negative edge in the triangle formed by $u, v$ and $w$.
+ \end{definition}
+
+Intuitively, a bad triangle captures the smallest unit of inconsistency in the similarity information among the given points. Indeed, irrespective of how the vertices of a bad triangle are clustered, note that the edges of this triangle incur a cost of at least $1$ unit in the objective function. This intuition is the crux behind the following LP relaxation of Charikar et al~\cite{XXX}. In what follows, let ${\cal B}$ denote the set of all bad triangles in the instance ${\cal I}$.
+
+\begin{alignat}{3} \label{LP:robcc-triangles}
+    \text{minimize} \sum_{(u,v) \in \binom{V}{2}} z_{u,v},& &&s.t. \label{LP3} \tag{LP_{\robcc}}\\
+    y_u + y_v + y_w + z_{u,v} + z_{v,w} + z_{u,w} \ge 1,& &&\forall T \equiv (u,v,w) \in {\cal B} , \nonumber\\
+    \sum_{u} y_u \le m, & \nonumber\\
+	z_{u,v} \in [ 0,1 ]&\qquad && \forall (u,v) \in \binom{V}{2}, \label{eq:011} \\
+	y_u \in [0,1]&, && \forall u \in V. \label{eq:002}
 \end{alignat}
 
-The linear programming relaxation of \ref{IP3} is obtained by replacing the integer constraints in \eqref{eq:011} and \eqref{eq:002} by $x_{uv} \in [0,1]$ and $Y_u \in[0,1]$ respectively. Let $\opt_{\ref{IP3}} = \{ z^*_{uv} : u,v \in \binom{V}{2} \}$ denote the fractional optimal solution of this linear program.
+\begin{lemma} \label{lem:relaxation-triangles}
+The LP \Cref{LP:robcc-triangles} is a valid LP relaxation for the \robcc problem, and the objective value of an optimal LP solution is at most $\opt({\cal I})$, where $\opt({\cal I})$ is the objective value of an optimal \robcc solution to instance ${\cal I}$.
+\end{lemma}
+
+\begin{proof}
+Proof is here.
+\end{proof}
+
 
 % 		\min \qquad \sum_{i \in F, j \in C}x_{i, j} d^q(i, j) \tag{$\text{LP}_{\text{strong}}$} \qquad  \label{LP:strong}
 % 	\text{s.t.} \\
@@ -127,18 +54,26 @@ The linear programming relaxation of \ref{IP3} is obtained by replacing the inte
 % 	    \sum_{j} d^q(i,j) x_{i,j} & \leq \rho \tilde U y_i & & \forall i \notin S_0 & \label{LPs:star} \\[-6pt]
 % 	    x_{i,j} &= 0 & &\forall i \notin S_0, j \, \text { s.t } \, d^q(i,j) >  \rho \tilde U &\label{LPs:R-d}
 
-For the sake of completeness, the LP relaxation of \ref{IP3} is provided below:
-\begin{alignat}{3}
-    \text{minimize} \sum_{(u,v) \in \binom{V}{2}} z_{uv},& &&s.t. \label{LP3}\tag{LP3}\\
-    Y_u + Y_v + Y_w + z_{uv} + z_{vw} + z_{uw} \ge 1,& &&\forall t = (u,v,w) \in B , \nonumber\\
-    \sum_{u} Y_u \le m, & \nonumber\\
-	z_{uv} \in [0,1]&\qquad && \forall (u,v) \in \binom{V}{2}, \label{eq:012} \\
-	Y_u \in [0,1]&, && \forall u \in V. \label{eq:0022}
-\end{alignat}
+\subsection{Rounding Algorithm}
+Let $\Opt_{\Cref{LP3}} = \{ z^*_{u,v}, y^*_u \}$ denote the fractional optimal solution of this linear program.
 
-\subsection{Algorithm for $m$-Robust Correlation Clustering}
+\begin{algorithm}
+\caption{${\sf RCC}(V,\sigma,m)$}
+\label{alg:RCC}
+\begin{algorithmic}[1]
+\State \textbf{Input:} Dataset $V$; correlation clustering instance $\sigma : \binom{V}{2} \to \{ +,- \}$.
+\State \textbf{Initialization:} $V_{g} = V$ \Comment{Set of unremoved vertices}
+\State Let the optimal solution of \ref{LP3} be denoted as $\{ Y_u^* : u \in V\} \cup \{ x_{uv}^* : (u,v) \in \binom{V}{2} \}$
+\For{$v \in V : Y_v^* \ge \frac14$}
+\State $V_{g} \gets V_{g} \setminus \{ v \}$
+\Comment{Delete vertices having $Y_u^* \ge 1/4$}
+\EndFor
+\State Let $\sigma_g$ be the restriction of $\sigma$ to vertices in $V_g$.
+\State \textbf{Return:} Clustering ${\sf CharikarCC} (V_g,\sigma_g)$.
+\end{algorithmic}
+%\end{center}
+\end{algorithm}
 
-We first describe the algorithm (Algorithm \ref{alg:CC:3apx}) [{\color{red} Aggregating Inconsistent Information: Ranking and Clustering, Nir Ailon, Moses Charikar, Alantha Newman}]:
 \begin{algorithm}
 \caption{${\sf CharikarCC}(V,\sigma)$}
 \label{alg:CharikarCC}
@@ -154,11 +89,12 @@ We first describe the algorithm (Algorithm \ref{alg:CC:3apx}) [{\color{red} Aggr
 %\end{center}
 \end{algorithm}
 
-\noindent Let us use $t$ to denote the triple $(u,v,w)$ where $\Delta uvw$ forms a bad triangle with two positive edges and one negative edge. Let $A_t^{(i)}$ denote the event that in iteration $i$, one of $u,v,w$ is chosen as a pivot and that $u,v,w$ belong to $V'$ in this recursive call of the algorithm. The total cost of the algorithm is then $\sum_i \sum_t \mathbbm{1} (A_t^{(i)})$ which is equal to $\sum_t A_t$ where $A_t$ denotes the event that one of $u,v,w$ is chosen as a pivot and that $u,v,w$ belong to $V'$ in the same recursive call of the algorithm.\\
+\begin{theorem}
+${\sf CharikarCC}(V,\sigma)$ is a $3$ approximation for Correlation Clustering.
+\end{theorem}
+\begin{proof} Let $t$ denote the triple $(u,v,w)$ where $\Delta uvw$ forms a bad triangle with two positive edges and one negative edge. Let $A_t^{(i)}$ denote the event that in iteration $i$, one of $u,v,w$ is chosen as a pivot and that $u,v,w$ belong to $V'$ in this recursive call of the algorithm. The total cost of the algorithm is then $\sum_i \sum_t \mathbbm{1} (A_t^{(i)})$. Using $A_t$ to represent the event that one of $u,v,w$ is chosen as a pivot in some iteration and that $u,v,w$ belong to $V'$ in the same recursive call of the algorithm, its cost can be written as $\sum_t \mathbbm{1} (A_t)$. Therefore, the expected cost of the algorithm is $\sum_t p_t$ where $p_t$ is the probability of the event $A_t$ occurring.\\
 
-\noindent Therefore, the expected cost of the algorithm is $\sum_t p_t$ where $p_t$ is the probability of $A_t$ occurring.\\
-
-    \noindent Observe that any algorithm will have to pay a unit cost for each triangle among any set of edge disjoint triangles from $B$. Therefore, we construct an optimization problem that finds the maximum number of edge disjoint triangles from $B$ and conclude that the cost of $OPT$ is at least this much. Let $B$ denote the set of tuples $(u,v,w)$ corresponding to bad triangles $\Delta uvw$. We therefore consider the dual to a relaxed LP,
+\noindent Observe that any algorithm will have to pay a unit cost for each triangle among any set of edge disjoint triangles from $B$. Therefore, we construct an optimization problem that finds the maximum number of edge disjoint triangles from $B$ and conclude that the cost of $OPT$ is at least this much. Let $B$ denote the set of tuples $(u,v,w)$ corresponding to bad triangles $\Delta uvw$. We therefore consider the dual to a relaxed LP,
 
 \begin{alignat}{3} \label{LP:CC-relax-dual}
 		\text{maximize} \qquad \sum_{t \in B} z_t &, && \qquad s.t., \nonumber\\
@@ -171,39 +107,41 @@ We now show that the set of probabilities $\{ p_t / 3,\ t \in B \}$ forms a vali
     P ( (u,v) \text{ is misclassified}) = \sum_{t \in B_{uv}} \frac{1}{3} p_t.
 \end{equation}
 Therefore, for every edge $e = (u,v)$, $\sum_{t \in B_{uv}} \frac{1}{3} p_t \le 1$ and this forms a feasible fractional solution to \ref{LP:CC-relax-dual}.
+\end{proof}
 
-\begin{figure}[H]
-\centering
-\includegraphics{./img/3apx.pdf}
-\caption{An instance of Algorithm \ref{alg:CC:3apx}}
-\label{fig:5}
-\end{figure}
+% \begin{figure}[H]
+% \centering
+% \includegraphics{./img/3apx.pdf}
+% \caption{An instance of Algorithm \ref{alg:CC:3apx}}
+% \label{fig:5}
+% \end{figure}
 
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-We now present an $(\alpha, \beta)$ bi-criterion approximation to the m-correlation clustering, where we remove fewer than $\alpha \times m$ vertices and generates a solution within a factor of $\beta$ of the optimal cost. Following algorithm provides a $(4,12)$ approximation.
+\subsection{LP-rounding based approximation for $m$-Robust Correlation Clustering}
 
-\begin{algorithm}
-\caption{${\sf RCC}(V,\sigma,m)$}
-\label{alg:RCC}
-\begin{algorithmic}[1]
-\State \textbf{Input:} Dataset $V$; correlation clustering instance $\sigma : \binom{V}{2} \to \{ +,- \}$.
-\State \textbf{Initialization:} $V_{g} = V$ \Comment{Set of unremoved vertices}
-\State Let the optimal solution of \ref{LP3} be denoted as $\{ Y_u^* : u \in V\} \cup \{ x_{uv}^* : (u,v) \in \binom{V}{2} \}$
-\For{$v \in V : Y_v^* \ge \frac14$}
-\State $V_{g} \gets V_{g} \setminus \{ v \}$
-\EndFor
-\State Let $\sigma_g$ be the restriction of $\sigma$ to vertices in $V_g$.
-\State \textbf{Return:} Clustering ${\sf CharikarCC} (V_g,\sigma_g)$.
-\end{algorithmic}
-%\end{center}
-\end{algorithm}
+We use the notation \textit{$(\alpha, \beta)$ bi-criterion approximation} to denote an algorithm for $m$-Robust Correlation Clustering which removes at most $\alpha m$ points, generating a solution within a factor of $\beta$ of the optimal cost. In the following, we describe a simple LP-rounding based $(4,12)$ bi-criteria approximation for $m$-Robust Correlation Clustering.
 
-Any solution to the Robust Correlation Clustering problem must pay a cost of $1$ for every edge-disjoint set of bad triangles that does not have any vertex removed. Consider the relaxed \ref{LP3}
 
-According to our algorithm, we round the $Y_u^* \ge 1/4$ to $1$ and $Y_u^* \le 1/4$ to $0$. Therefore, we do not exceed the budget of number of vertices to remove by more than a factor of $4$. On the other hand, for any vertex that is removed, the corresponding bad triangles do not incur any cost for the algorithm. In case, none of the vertices of the triangle are removed, the constraints of \ref{LP:3} are now represented as:
+\begin{theorem}
+Algorithm ${\sf RCC} (V,\sigma,m)$ is a $(4,12)$ bi-criteria approximation for $m$-Robust Correlation Clustering.
+\end{theorem}
+\begin{proof}
+In order to show that ${\sf RCC} (V,\sigma,m)$ is a $(4,12)$ bi-criteria approximation for $m$-Robust Correlation Clustering, we show that (a) at most $4m$ vertices are deleted, and (b) the clustering has a cost within a factor of $12$ of the optimal.
+
+\begin{enumerate}
+    \item[(a)] According to ${\sf RCC}(V,\sigma,m)$, vertices having $Y_u^* \ge 1/4$ in the optimal LP solution are deleted. Let the set of vertices deleted by ${\sf RCC} (V,\sigma,m)$ be denoted $V_r$. Then,
+    \begin{align*}
+        |V_r| &= \sum_{u \in V} \mathbbm{1} (Y_u^* \ge 1/4)\\
+        &\le \sum_{u \in V} 4 Y_u^*\\
+        &\le 4m
+    \end{align*}
+Therefore, the budget of number of vertices removed is not exceeded by more than a factor of $4$.\\
+
+In order to show that the cost is within a factor of $12$ of the optimal, recall the definition of \ref{LP3} which is an LP relaxation for the $m$-Robust Correlation Clustering LP. 
+On the other hand, for any vertex that is removed, the corresponding bad triangles do not incur any cost for the algorithm. In case, none of the vertices of the triangle are removed, the constraints of \ref{LP3} are now represented as:
 \begin{alignat}{3} \label{LP:CC-relax-reduced:2}
 		\text{minimize} \qquad \sum_{(u,v) \in \binom{V}{2} : Y_u^*, Y_v^* \le 1/4} z_{uv}&, \qquad &&s.t., \nonumber\\
 		\quad z_{uv} + z_{vw} + z_{uw} \ge 1/4 &, \qquad &&\forall t = (u,v,w) \in B : Y_u^* \ \&\ Y_v^* \ \&\ Y_w^* \le 1/4, \nonumber\\
@@ -217,10 +155,13 @@ The dual of this LP is:
 		r_{t} \in [ 0,1 ] &, &&\qquad \forall t \in B'.\tag{LP5}
 \end{alignat}
 By a similar logic as previously, the solution $\{ \frac{1}{3} p_t, t \in B'\}$ is a valid solution to the dual, having cost equal to $\frac{1}{12} \sum_{t \in B'} p_t$. The algorithm has an expected cost of $\sum_{t \in B'} p_t$. This is because the algorithm only accumulates the cost corresponding to the event $A_t$ if none of the vertices in $t$ are removed in the preliminary vertex removal stage.
+    \item[(b)]
+\end{enumerate}
 
-$---------------------------------------------$
+\end{proof}
 
-\subsection{A combinatorial algorithm for $m$-robust clustering on complete graphs?}
+
+\subsection{A combinatorial approximation for $m$-Robust Clustering on complete graphs}
 
 The linear programming relaxation of \ref{IP:CC5} is obtained by replacing the integer constraints in \eqref{eq:d01}, \eqref{eq:d02}, and \eqref{eq:d03} by $x_{uv} \in [0,1]$, $z_{uv} \in [0,1]$, and $Y_u \in[0,1]$ respectively. Let \setword{LP4}{LP:CC-relax-ip4} denote this relaxed LP, and $\opt^*$ denote the optimal solution to \ref{LP:CC-relax-ip4}. Let us consider the following relaxation to \ref{LP:CC-relax-ip4},
 

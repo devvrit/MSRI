@@ -1,27 +1,43 @@
 \section{Correlation Clustering}
-Consider $G = ([n],\binom{[n]}{2})$, the complete graph on $n$ vertices. Each edge in $G$ is associated with a label, either $+$ or $-$. Two vertices are said to be similar if the edge between them is $+$ and dissimilar if the edge between them is $-$. The cost of a clustering $C$ over $[n]$ is defined as the sum of the number of similar edges between vertices in different clusters, and dissimilar vertices between vertices in the same cluster. The cost of a clustering $C$ over a subset of vertices $V \subseteq [n]$ is computed by only counting the cost incurred by the induced subgraph of $V$. For a clustering $C$, this is denoted $\cost (C, V)$.
+%Consider $G = ([n],\binom{[n]}{2})$, the complete graph on $n$ vertices. Each edge in $G$ is associated with a label, either $+$ or $-$. Two vertices are said to be similar if the edge between them is $+$ and dissimilar if the edge between them is $-$. The cost of a clustering $C$ over $[n]$ is defined as the sum of the number of similar edges between vertices in different clusters, and dissimilar vertices between vertices in the same cluster. The cost of a clustering $C$ over a subset of vertices $V \subseteq [n]$ is computed by only counting the cost incurred by the induced subgraph of $V$. For a clustering $C$, this is denoted $\cost (C, V)$.
+\rnote{Use ``\Cref'' instead of ``\ref'' as it will smartly append a prefix of Theorem, or Lemma, or whatever. We don't need to do it.}
+\rnote{Use ``{\cal I}'' for instances as it is somewhat standard.}
 
+The classical problem is correlation clustering can be stated as follows.
 \begin{problem}[Correlation Clustering] \label{prob:1}
-	The correlation clustering problem is to cluster the vertices in $[n]$ into as many or as few clusters as possible such that the total cost is minimized.
-	\begin{equation*}
-		\text{Find } C^* = \argmin_C \cost (C, [n]).
-	\end{equation*}
+We are given a complete graph $G = (V,E)$, and a labelling of each edge as either positive or negative, denoting whether the two points are similar or dissimilar. The goal is to compute a partition ${\cal C} = \{C_1, C_2, \ldots, C_r\}$ of $V$ (so $V = \dot\cup_{1 \leq i \leq r} C_i$ is a disjoint union of the $C_i$'s) to minimize the \emph{cost} of the clustering, which is the sum of positive edges whose end-points are in different clusters and the negative edges whose end-points are in the same cluster. 
+%	The correlation clustering problem is to cluster the vertices in $[n]$ into as many or as few clusters as possible such that the total cost is minimized.
+%	\begin{equation*}
+%		\text{Find } C^* = \argmin_C \cost (C, [n]).
+%	\end{equation*}
 \end{problem}
 
-\begin{problem}[$m$-Robust Correlation Clustering] \label{prob:2}
-	We are given the complete graph $G$ with $\{ +,- \}$ edge labels and the optimal correlation clustering, $C^*$ of the vertices of $G$. The goal is to pick $m$ vertices to remove from $G$ such that the cost of the remaining subgraph is minimized for the clustering $C^*$. In other words, the goal is to find:
-	\begin{equation*}
-		\mathrm{Find }\ R^* = \argmin_{\substack{R \subseteq [n] \\ |R| = m}} \cost (C^*, [n] \setminus R)
-	\end{equation*}
+In this paper, we consider the \emph{robust correlation clustering} problem (\robcc) which is a generalization of the correlation clustering problem with the added goal of being resilient to \emph{outliers} in the given data. 
+
+\begin{problem}[Robust Correlation Clustering] \label{prob:2}
+We are given a complete graph $G = (V,E)$, and a labelling of each edge as either positive or negative, denoting whether the two points are similar or dissimilar. We are also given a parameter $m$, which denotes the number of points we can discard while clustering. The goal is to identify a set $D \subseteq V$ of \emph{outliers} of size $m$, and cluster the remaining points $V\setminus D$ to minimize the cost of the clustering. That is, we would like to find a partition ${\cal C} = \{C_1, C_2, \ldots, C_r\}$ of $V \setminus D$ to minimize the sum of positive edges whose end-points are in different clusters in ${\cal C}$ and the negative edges whose end-points are in the same cluster in ${\cal C}$. 
 \end{problem}
 
-In addition, we may consider two other problems - generalized correlation and $m$-robust correlation clustering. The objective here is the same as in Problems \ref{prob:1} and \ref{prob:2}, but the underlying graph is a general graph and need not be the complete graph.
+In addition, we also consider the \robcc problem on general graphs, where the edge-set is not the complete graph over $V$, to capture the notion of missing similarity information between certain pairs of points. This naturally extends the analogous study of correlation clustering in general graphs \cite{XXX}.
 
-\begin{proposition}
-Can we claim that:
-	\begin{equation*}
-		\min_{\substack{R \subseteq [n] \\ |R| = m}} \cost (C^*, [n] \setminus R) \overset{?}{=} \min_C \min_{\substack{R \subseteq [n] \\ |R| = m}} \cost (C, [n] \setminus R)
-	\end{equation*}
-where $C^* = \argmin_{C} \cost (C, [n])$. This is possibly true for $m=1$.
-\end{proposition}
-This indicates that the robust problem actually solves the more general problem of finding the best clustering on $n$ points assuming that one is allowed to discard at most $m$ points.
+\subsection{Our Results}
+\begin{theorem} \label{thm:complete-hardness}
+It is NP-hard to obtain any bi-criteria $(a,b)$-approximation algorithm for \robcc on complete graphs when $b < \alpha_{\sf VertexCover}$.
+\end{theorem}
+
+
+\begin{theorem} \label{thm:complete1}
+There is an efficient bi-criteria $(a,b)$-approximation algorithm for \robcc on complete graphs.
+\end{theorem}
+
+\begin{theorem} \label{thm:complete2}
+There is an efficient and \emph{purely combinatorial} bi-criteria $(a,b)$-approximation algorithm for \robcc on complete graphs.
+\end{theorem}
+
+\begin{theorem} \label{thm:general-hardness}
+It is NP-hard to obtain any bi-criteria $(a,b)$-approximation algorithm for \robcc on general graphs for $b < \alpha_{\sf MultiCut}$ or $a < \alpha_{\sf MultiCut}$.
+\end{theorem}
+
+\begin{theorem} \label{thm:general}
+There is an efficient bi-criteria $(a,b)$-approximation algorithm for \robcc on general graphs.
+\end{theorem}

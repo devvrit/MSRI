@@ -1,4 +1,5 @@
 \section{Hardness of Perfect Correlation Clustering (PCC)}
+In this section, we investigate the hardness of robust correlation clustering. Our first result shows that unlike correlation clustering (\ref{prob:1}), it is in fact NP-hard to get any finite approximation algorithm for \robcc, \emph{unless we violate} the number of outliers by a constant factor. This therefore naturally justifies us seeking \emph{bi-criteria} approximation algorithms (\Cref{thm:complete1,thm:complete2,thm:general} where both the objective value and the number of outliers are violated by certain multiplicative factors. 
 
 \begin{theorem}
 It is $\NP$-hard to decide whether, the decision version of Perfect Correlation Clustering is inapproximable to a factor smaller than $10 \sqrt{5} - 21 = 1.3606\dots$, assuming $\mathrm{P} \ne \NP$. In other words, consider a dataset, removing $k$ vertices from which is perfectly clusterable. Then, it is $\NP$-hard to decide whether there exists fewer than $(10 \sqrt{5} - 21)k$ vertices, removing which, the dataset is perfectly clusterable.
@@ -19,7 +20,7 @@ The proof follows by an approximation preserving reduction from vertex cover. Co
 %This is denoted the "natural" clustering which has a cost of $0$ and its components are known as natural clusters.\\
 
 \paragraph{Construction of $\NP$-hard PCC instances}
-Construct a dataset having $2n$ points arranged into $n$ buckets, each having $2$ points. Pairs of points within the same bucket are separated by a $+$, while pairs of points in different buckets are separated by a $-$. From each of the $n$ buckets, one point is selected arbitrarily and labelled a \textit{bad vertex} of that bucket. The set of bad vertices are numbered in arbitrary order as $1,2,\dots,n$. An instance of PCC, denoted $\mathbf{I}_G$ is constructed from $G$ as follows: for every pair of vertices $i,j \in V$ if $(i,j) \in E$, then set $\sign (i,j)$ to $+$ from $-$. $B_i$ denotes the bucket corresponding to bad vertex $i$.
+Construct a dataset having $2n$ points arranged into $n$ buckets, each having $2$ points. Pairs of points within the same bucket are similar, i.e. are separated by a $+$, while pairs of points in different buckets are dissimilar and separated by a $-$. From each of the $n$ buckets, one point is selected arbitrarily and labelled a \textit{bad vertex} of that bucket. The set of bad vertices are numbered in arbitrary order as $1,2,\dots,n$. An instance of PCC, denoted $\mathbf{I}_G$ is constructed from $G$ as follows: for every pair of vertices $i,j \in V$ if $(i,j) \in E$, then set $\sign (i,j)$ to $+$ from $-$. $B_i$ denotes the bucket corresponding to bad vertex $i$.
 
 We are now ready to show the hardness reduction.
 

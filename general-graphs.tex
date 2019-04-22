@@ -372,9 +372,9 @@ where $\alg$ is the cost incurred by the algorithm, equal to the number of edges
 \end{enumerate}
 \end{proof}
 
-\begin{remark}
-Algorithm \ref{alg:min-edge-uncover} can be easily modified to give a $\left( k,\frac{k}{k-2} \right)$ bi-criteria approximation for \ref{IP:edge-uncover}, by instead outputting $\{ v \in V : Y_v^* \ge \frac1k\}$. This follows by an identical argument to that in Theorem \ref{theorem:min-edge-uncover-alg-proof}, where the choice of $k$ is $3$. We denote this algorithm as {\sf ApproxMEU$_k$ (G,m)}
-\end{remark}
+% \begin{remark}
+% Algorithm \ref{alg:min-edge-uncover} can be easily modified to give a $\left( k,\frac{k}{k-2} \right)$ bi-criteria approximation for \ref{IP:edge-uncover}, by instead outputting $\{ v \in V : Y_v^* \ge \frac1k\}$. This follows by an identical argument to that in Theorem \ref{theorem:min-edge-uncover-alg-proof}, where the choice of $k$ is $3$. We denote this algorithm as {\sf ApproxMEU$_k$ (G,m)}
+% \end{remark}
 
 For a clustering $\mathcal{C}$ over a vertex-set $V$, let $\mathcal{C} (u,v) : \binom{V}{2} \to \{ 0,1 \}$ be defined as $0$ if $u$ and $v$ lie in the same cluster in $\mathcal{C}$ and $1$ otherwise. Additionally, let $C^{-1} (v) = \{ u : \mathcal{C} (u,v) = 0\}$ denote the set of vertices in the same cluster as $v$.
 \begin{algorithm}
